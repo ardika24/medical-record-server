@@ -6,18 +6,17 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { PatientResolver } from './resolvers/patient';
 import { MedicalRecordResolver } from './resolvers/medicalRecord';
-import * as dotenv from 'dotenv';
+import { UserResolver } from './resolvers/user';
 
 const main = async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
   await orm.getMigrator().up();
 
-  dotenv.config();
   const app = express();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PatientResolver, MedicalRecordResolver],
+      resolvers: [PatientResolver, MedicalRecordResolver, UserResolver],
       validate: false,
     }),
     context: () => ({
